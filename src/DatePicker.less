@@ -10,7 +10,7 @@
 
   &__button {
     display: flex;
-    border: thin solid gray;
+    border: none;
 
     &__input {
       @digit-width: .54em;
@@ -27,7 +27,7 @@
       }
 
       &__input {
-        min-width: calc(~"4px + " @digit-width);
+        width: fit-content;
         height: 100%;
         position: relative;
         padding: 1px;

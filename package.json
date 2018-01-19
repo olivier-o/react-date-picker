@@ -96,7 +96,7 @@
     "LICENSE",
     "README.md",
     "index.d.ts",
-    "dist/",
+    "build/",
     "src/"
   ],
   "repository": {

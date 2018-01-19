@@ -24,7 +24,7 @@
 .react-date-picker__button__input__divider {
   padding: 1px 0;
 }
-.react-date-picker__button__input input {
+.react-date-picker__button__input__input {
   width: fit-content;
   height: 100%;
   position: relative;

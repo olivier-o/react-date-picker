@@ -184,10 +184,6 @@ export default class DateInput extends Component {
 
         // Save a reference to each input field
         this[`${ref.name}Input`] = ref;
-<<<<<<< HEAD
-=======
-
->>>>>>> replace dynamic input style width with style 'width:fit-content', remove input border
       },
     };
   }
@@ -229,18 +225,12 @@ export default class DateInput extends Component {
    * Called when non-native date input is changed.
    */
   onChange = (event) => {
-<<<<<<< HEAD
     const { name, value } = event.target;
 
     this.setState(
       { [name]: value ? parseInt(value, 10) : null },
       this.onChangeExternal,
     );
-=======
-    this.setState({ [event.target.name]: event.target.value });
-
-    this.onChangeExternal();
->>>>>>> replace dynamic input style width with style 'width:fit-content', remove input border
   }
 
   /**

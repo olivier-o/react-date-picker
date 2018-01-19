@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-require('react-calendar/build/Calendar.css');
+require('react-calendar/dist/Calendar.css');
 
 var _DatePicker = require('./DatePicker');
 

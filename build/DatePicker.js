@@ -22,19 +22,17 @@ var _mergeClassNames = require('merge-class-names');
 
 var _mergeClassNames2 = _interopRequireDefault(_mergeClassNames);
 
-var _entry = require('react-calendar/build/entry.nostyle');
-
-var _entry2 = _interopRequireDefault(_entry);
-
 var _detectElementOverflow = require('detect-element-overflow');
 
 var _detectElementOverflow2 = _interopRequireDefault(_detectElementOverflow);
 
+var _entry = require('react-calendar/dist/entry.nostyle');
+
+var _entry2 = _interopRequireDefault(_entry);
+
 var _DateInput = require('./DateInput');
 
 var _DateInput2 = _interopRequireDefault(_DateInput);
-
-var _propTypes3 = require('./shared/propTypes');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -45,8 +43,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var allViews = ['century', 'decade', 'year', 'month'];
 
 var DatePicker = function (_Component) {
   _inherits(DatePicker, _Component);
@@ -92,6 +88,8 @@ var DatePicker = function (_Component) {
       _this.openCalendar();
     }, _this.stopPropagation = function (event) {
       return event.stopPropagation();
+    }, _this.clear = function () {
+      return _this.onChange(null);
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
@@ -116,15 +114,21 @@ var DatePicker = function (_Component) {
       }
     }
   }, {
-    key: 'renderInput',
-    value: function renderInput() {
+    key: 'renderInputs',
+    value: function renderInputs() {
       var _props = this.props,
+          calendarIcon = _props.calendarIcon,
+          clearIcon = _props.clearIcon,
           locale = _props.locale,
           maxDate = _props.maxDate,
           maxDetail = _props.maxDetail,
           minDate = _props.minDate,
+          name = _props.name,
           returnValue = _props.returnValue,
+          required = _props.required,
+          showLeadingZeros = _props.showLeadingZeros,
           value = _props.value;
+      var isOpen = this.state.isOpen;
 
       var _concat = [].concat(value),
           _concat2 = _slicedToArray(_concat, 1),
@@ -135,33 +139,37 @@ var DatePicker = function (_Component) {
         { className: 'react-date-picker__button' },
         _react2.default.createElement(_DateInput2.default, {
           locale: locale,
+          isCalendarOpen: isOpen,
           maxDate: maxDate,
           maxDetail: maxDetail,
           minDate: minDate,
+          name: name,
           onChange: this.onChange,
-          placeholder: this.placeholder,
           returnValue: returnValue,
+          required: required,
+          showLeadingZeros: showLeadingZeros,
           value: valueFrom
         }),
         _react2.default.createElement(
           'button',
           {
-            className: 'react-date-picker__button__icon',
-            onClick: this.toggleCalendar,
+            className: 'react-date-picker__clear-button react-date-picker__button__icon',
+            onClick: this.clear,
             onFocus: this.stopPropagation,
             type: 'button'
           },
-          _react2.default.createElement(
-            'svg',
-            { xmlns: 'http://www.w3.org/2000/svg', width: '19', height: '19', viewBox: '0 0 19 19' },
-            _react2.default.createElement(
-              'g',
-              { stroke: 'black', strokeWidth: '2' },
-              _react2.default.createElement('rect', { width: '15', height: '15', x: '2', y: '2', fill: 'none' }),
-              _react2.default.createElement('line', { x1: '6', y1: '0', x2: '6', y2: '4' }),
-              _react2.default.createElement('line', { x1: '13', y1: '0', x2: '13', y2: '4' })
-            )
-          )
+          clearIcon
+        ),
+        _react2.default.createElement(
+          'button',
+          {
+            className: 'react-date-picker__calendar-button react-date-picker__button__icon',
+            onClick: this.toggleCalendar,
+            onFocus: this.stopPropagation,
+            onBlur: this.resetValue,
+            type: 'button'
+          },
+          calendarIcon
         )
       );
     }
@@ -212,21 +220,18 @@ var DatePicker = function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      var isOpen = this.state.isOpen;
-
-
       var className = 'react-date-picker';
 
       return _react2.default.createElement(
         'div',
         {
-          className: (0, _mergeClassNames2.default)(className, className + '--' + (isOpen ? 'open' : 'closed'), this.props.className),
+          className: (0, _mergeClassNames2.default)(className, className + '--' + (this.state.isOpen ? 'open' : 'closed'), this.props.className),
           onFocus: this.onFocus,
           ref: function ref(_ref3) {
             _this2.wrapper = _ref3;
           }
         },
-        this.renderInput(),
+        this.renderInputs(),
         this.renderCalendar()
       );
     }
@@ -238,33 +243,42 @@ var DatePicker = function (_Component) {
 exports.default = DatePicker;
 
 
+var CalendarIcon = _react2.default.createElement(
+  'svg',
+  { xmlns: 'http://www.w3.org/2000/svg', width: '19', height: '19', viewBox: '0 0 19 19' },
+  _react2.default.createElement(
+    'g',
+    { stroke: 'black', strokeWidth: '2' },
+    _react2.default.createElement('rect', { width: '15', height: '15', x: '2', y: '2', fill: 'none' }),
+    _react2.default.createElement('line', { x1: '6', y1: '0', x2: '6', y2: '4' }),
+    _react2.default.createElement('line', { x1: '13', y1: '0', x2: '13', y2: '4' })
+  )
+);
+
+var ClearIcon = _react2.default.createElement(
+  'svg',
+  { xmlns: 'http://www.w3.org/2000/svg', width: '19', height: '19', viewBox: '0 0 19 19' },
+  _react2.default.createElement(
+    'g',
+    { stroke: 'black', strokeWidth: '2' },
+    _react2.default.createElement('line', { x1: '4', y1: '4', x2: '15', y2: '15' }),
+    _react2.default.createElement('line', { x1: '15', y1: '4', x2: '4', y2: '15' })
+  )
+);
+
 DatePicker.defaultProps = {
+  calendarIcon: CalendarIcon,
+  clearIcon: ClearIcon,
   isOpen: null,
-  maxDetail: 'month',
   returnValue: 'start'
 };
 
-DatePicker.propTypes = {
+DatePicker.propTypes = _extends({}, _entry2.default.propTypes, {
   calendarClassName: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.arrayOf(_propTypes2.default.string)]),
-  calendarType: _propTypes3.isCalendarType,
+  calendarIcon: _propTypes2.default.node,
   className: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.arrayOf(_propTypes2.default.string)]),
+  clearIcon: _propTypes2.default.node,
   isOpen: _propTypes2.default.bool,
-  locale: _propTypes2.default.string,
-  maxDate: _propTypes3.isMaxDate,
-  maxDetail: _propTypes2.default.oneOf(allViews),
-  minDate: _propTypes3.isMinDate,
-  minDetail: _propTypes2.default.oneOf(allViews),
-  next2Label: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.node]),
-  nextLabel: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.node]),
-  onChange: _propTypes2.default.func,
-  onClickDay: _propTypes2.default.func,
-  onClickDecade: _propTypes2.default.func,
-  onClickMonth: _propTypes2.default.func,
-  onClickYear: _propTypes2.default.func,
-  prev2Label: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.node]),
-  prevLabel: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.node]),
   returnValue: _propTypes2.default.oneOf(['start', 'end']),
-  showNeighboringMonth: _propTypes2.default.bool,
-  showWeekNumbers: _propTypes2.default.bool,
-  value: _propTypes3.isValue
-};
+  showLeadingZeros: _propTypes2.default.bool
+});

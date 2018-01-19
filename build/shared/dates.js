@@ -3,16 +3,60 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getISOLocalDate = exports.getISOLocalMonth = exports.getEnd = exports.getBegin = exports.getDaysInMonth = exports.getDay = exports.getMonthIndex = exports.getMonth = exports.getYear = undefined;
 
-var _dates = require('react-calendar/build/shared/dates');
+var _dates = require('react-calendar/dist/shared/dates');
 
-exports.getYear = _dates.getYear;
-exports.getMonth = _dates.getMonth;
-exports.getMonthIndex = _dates.getMonthIndex;
-exports.getDay = _dates.getDay;
-exports.getDaysInMonth = _dates.getDaysInMonth;
-exports.getBegin = _dates.getBegin;
-exports.getEnd = _dates.getEnd;
-exports.getISOLocalMonth = _dates.getISOLocalMonth;
-exports.getISOLocalDate = _dates.getISOLocalDate;
+Object.defineProperty(exports, 'getYear', {
+  enumerable: true,
+  get: function get() {
+    return _dates.getYear;
+  }
+});
+Object.defineProperty(exports, 'getMonth', {
+  enumerable: true,
+  get: function get() {
+    return _dates.getMonth;
+  }
+});
+Object.defineProperty(exports, 'getMonthIndex', {
+  enumerable: true,
+  get: function get() {
+    return _dates.getMonthIndex;
+  }
+});
+Object.defineProperty(exports, 'getDay', {
+  enumerable: true,
+  get: function get() {
+    return _dates.getDay;
+  }
+});
+Object.defineProperty(exports, 'getDaysInMonth', {
+  enumerable: true,
+  get: function get() {
+    return _dates.getDaysInMonth;
+  }
+});
+Object.defineProperty(exports, 'getBegin', {
+  enumerable: true,
+  get: function get() {
+    return _dates.getBegin;
+  }
+});
+Object.defineProperty(exports, 'getEnd', {
+  enumerable: true,
+  get: function get() {
+    return _dates.getEnd;
+  }
+});
+Object.defineProperty(exports, 'getISOLocalMonth', {
+  enumerable: true,
+  get: function get() {
+    return _dates.getISOLocalMonth;
+  }
+});
+Object.defineProperty(exports, 'getISOLocalDate', {
+  enumerable: true,
+  get: function get() {
+    return _dates.getISOLocalDate;
+  }
+});

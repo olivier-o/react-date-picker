@@ -42,7 +42,7 @@ var updateInputWidth = exports.updateInputWidth = function updateInputWidth(elem
 
   container.appendChild(span);
 
-  var width = span.getBoundingClientRect().width + 4;
+  var width = span.getBoundingClientRect().width + 30;
   element.style.width = width + 'px';
 
   container.removeChild(span);

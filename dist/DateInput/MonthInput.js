@@ -47,6 +47,7 @@ var MonthInput = function (_PureComponent) {
       var maxMonth = this.maxMonth,
           minMonth = this.minMonth;
       var _props = this.props,
+          className = _props.className,
           itemRef = _props.itemRef,
           value = _props.value,
           onChange = _props.onChange,
@@ -56,7 +57,6 @@ var MonthInput = function (_PureComponent) {
 
 
       var hasLeadingZero = showLeadingZeros && value !== null && value < 10;
-      var className = 'react-date-picker__button__input';
 
       return [hasLeadingZero ? '0' : null, _react2.default.createElement('input', {
         key: 'month',
@@ -108,6 +108,7 @@ exports.default = MonthInput;
 
 
 MonthInput.propTypes = {
+  className: _propTypes2.default.string.isRequired,
   itemRef: _propTypes2.default.func,
   maxDate: _propTypes3.isMaxDate,
   minDate: _propTypes3.isMinDate,

@@ -16,6 +16,10 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _Divider = require('./Divider');
+
+var _Divider2 = _interopRequireDefault(_Divider);
+
 var _DayInput = require('./DateInput/DayInput');
 
 var _DayInput2 = _interopRequireDefault(_DayInput);
@@ -36,8 +40,6 @@ var _dateFormatter = require('./shared/dateFormatter');
 
 var _dates = require('./shared/dates');
 
-var _locales = require('./shared/locales');
-
 var _propTypes3 = require('./shared/propTypes');
 
 var _utils = require('./shared/utils');
@@ -56,6 +58,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 var allViews = ['century', 'decade', 'year', 'month'];
 var allValueTypes = [].concat(_toConsumableArray(allViews.slice(1)), ['day']);
+var className = 'react-date-picker__button__input';
 
 var datesAreDifferent = function datesAreDifferent(date1, date2) {
   return date1 && !date2 || !date1 && date2 || date1 && date2 && date1.getTime() !== date2.getTime();
@@ -110,7 +113,45 @@ var DateInput = function (_Component) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = DateInput.__proto__ || Object.getPrototypeOf(DateInput)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = DateInput.__proto__ || Object.getPrototypeOf(DateInput)).call.apply(_ref, [this].concat(args))), _this), _this.getValueFrom = function (value) {
+      if (!value) {
+        return null;
+      }
+
+      var _this$props = _this.props,
+          minDate = _this$props.minDate,
+          maxDate = _this$props.maxDate;
+
+      var rawValueFrom = value instanceof Array ? value[0] : value;
+      var valueFromDate = new Date(rawValueFrom);
+
+      if (Number.isNaN(valueFromDate.getTime())) {
+        throw new Error('Invalid date: ' + value);
+      }
+
+      var valueFrom = (0, _dates.getBegin)(_this.valueType, valueFromDate);
+
+      return (0, _utils.between)(valueFrom, minDate, maxDate);
+    }, _this.getValueTo = function (value) {
+      if (!value) {
+        return null;
+      }
+
+      var _this$props2 = _this.props,
+          minDate = _this$props2.minDate,
+          maxDate = _this$props2.maxDate;
+
+      var rawValueTo = value instanceof Array ? value[1] : value;
+      var valueToDate = new Date(rawValueTo);
+
+      if (Number.isNaN(valueToDate.getTime())) {
+        throw new Error('Invalid date: ' + value);
+      }
+
+      var valueTo = (0, _dates.getEnd)(_this.valueType, valueToDate);
+
+      return (0, _utils.between)(valueTo, minDate, maxDate);
+    }, _this.state = {
       year: null,
       month: null,
       day: null
@@ -172,56 +213,12 @@ var DateInput = function (_Component) {
   }
 
   _createClass(DateInput, [{
-    key: 'getValueFrom',
-    value: function getValueFrom(value) {
-      if (!value) {
-        return null;
-      }
+    key: 'getProcessedValue',
 
-      var _props = this.props,
-          minDate = _props.minDate,
-          maxDate = _props.maxDate;
-
-      var rawValueFrom = value instanceof Array ? value[0] : value;
-      var valueFromDate = new Date(rawValueFrom);
-
-      if (Number.isNaN(valueFromDate.getTime())) {
-        throw new Error('Invalid date: ' + value);
-      }
-
-      var valueFrom = (0, _dates.getBegin)(this.valueType, valueFromDate);
-
-      return (0, _utils.between)(valueFrom, minDate, maxDate);
-    }
-  }, {
-    key: 'getValueTo',
-    value: function getValueTo(value) {
-      if (!value) {
-        return null;
-      }
-
-      var _props2 = this.props,
-          minDate = _props2.minDate,
-          maxDate = _props2.maxDate;
-
-      var rawValueTo = value instanceof Array ? value[1] : value;
-      var valueToDate = new Date(rawValueTo);
-
-      if (Number.isNaN(valueToDate.getTime())) {
-        throw new Error('Invalid date: ' + value);
-      }
-
-      var valueTo = (0, _dates.getEnd)(this.valueType, valueToDate);
-
-      return (0, _utils.between)(valueTo, minDate, maxDate);
-    }
 
     /**
      * Gets current value in a desired format.
      */
-
-  }, {
-    key: 'getProcessedValue',
     value: function getProcessedValue(value) {
       var returnValue = this.props.returnValue;
 
@@ -238,30 +235,18 @@ var DateInput = function (_Component) {
   }, {
     key: 'componentWillMount',
     value: function componentWillMount() {
-      (0, _locales.setLocale)(this.props.locale);
       this.updateValues();
     }
   }, {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      var props = this.props;
       var nextValue = nextProps.value;
       var value = this.props.value;
 
 
-      if (nextProps.locale !== props.locale) {
-        (0, _locales.setLocale)(nextProps.locale);
-      }
-
-      var nextValueFrom = this.getValueFrom(nextValue);
-      var valueFrom = this.getValueFrom(value);
-
-      var nextValueTo = this.getValueTo(nextValue);
-      var valueTo = this.getValueTo(value);
-
       if (
       // Toggling calendar visibility resets values
-      nextProps.isCalendarOpen !== props.isCalendarOpen || datesAreDifferent(nextValueFrom, valueFrom) || datesAreDifferent(nextValueTo, valueTo)) {
+      nextProps.isCalendarOpen !== this.props.isCalendarOpen || datesAreDifferent.apply(undefined, _toConsumableArray([nextValue, value].map(this.getValueFrom))) || datesAreDifferent.apply(undefined, _toConsumableArray([nextValue, value].map(this.getValueTo)))) {
         this.updateValues(nextProps);
       }
     }
@@ -302,9 +287,9 @@ var DateInput = function (_Component) {
   }, {
     key: 'renderDay',
     value: function renderDay() {
-      var _props3 = this.props,
-          maxDetail = _props3.maxDetail,
-          showLeadingZeros = _props3.showLeadingZeros;
+      var _props = this.props,
+          maxDetail = _props.maxDetail,
+          showLeadingZeros = _props.showLeadingZeros;
 
       // Do not display if maxDetail is "year" or less
 
@@ -317,6 +302,7 @@ var DateInput = function (_Component) {
 
       return _react2.default.createElement(_DayInput2.default, _extends({
         key: 'day',
+        className: className,
         maxDetail: this.props.maxDetail,
         month: this.state.month,
         showLeadingZeros: showLeadingZeros,
@@ -327,9 +313,9 @@ var DateInput = function (_Component) {
   }, {
     key: 'renderMonth',
     value: function renderMonth() {
-      var _props4 = this.props,
-          maxDetail = _props4.maxDetail,
-          showLeadingZeros = _props4.showLeadingZeros;
+      var _props2 = this.props,
+          maxDetail = _props2.maxDetail,
+          showLeadingZeros = _props2.showLeadingZeros;
 
       // Do not display if maxDetail is "decade" or less
 
@@ -342,6 +328,7 @@ var DateInput = function (_Component) {
 
       return _react2.default.createElement(_MonthInput2.default, _extends({
         key: 'month',
+        className: className,
         maxDetail: this.props.maxDetail,
         minDate: this.props.minDate,
         showLeadingZeros: showLeadingZeros,
@@ -354,6 +341,7 @@ var DateInput = function (_Component) {
     value: function renderYear() {
       return _react2.default.createElement(_YearInput2.default, _extends({
         key: 'year',
+        className: className,
         value: this.state.year,
         valueType: this.valueType
       }, this.commonInputProps));
@@ -364,7 +352,6 @@ var DateInput = function (_Component) {
       var _this2 = this;
 
       var divider = this.divider,
-          dividerElement = this.dividerElement,
           placeholder = this.placeholder;
 
 
@@ -383,8 +370,13 @@ var DateInput = function (_Component) {
         result.push(element);
 
         if (index + 1 < array.length) {
+          result.push(
           // eslint-disable-next-line react/no-array-index-key
-          result.push(_react2.default.cloneElement(dividerElement, { key: 'separator_' + index }));
+          _react2.default.createElement(
+            _Divider2.default,
+            { key: 'separator_' + index },
+            divider
+          ));
         }
 
         return result;
@@ -409,7 +401,7 @@ var DateInput = function (_Component) {
     value: function render() {
       return _react2.default.createElement(
         'div',
-        { className: 'react-date-picker__button__input' },
+        { className: className },
         this.renderNativeInput(),
         this.renderCustomInputs()
       );
@@ -427,18 +419,11 @@ var DateInput = function (_Component) {
   }, {
     key: 'divider',
     get: function get() {
+      var locale = this.props.locale;
+
       var date = new Date(2017, 11, 11);
 
-      return removeUnwantedCharacters((0, _dateFormatter.formatDate)(date)).match(/[^0-9]/)[0];
-    }
-  }, {
-    key: 'dividerElement',
-    get: function get() {
-      return _react2.default.createElement(
-        'span',
-        { className: 'react-date-picker__button__input__divider' },
-        this.divider
-      );
+      return removeUnwantedCharacters((0, _dateFormatter.formatDate)(date, locale)).match(/[^0-9]/)[0];
     }
 
     // eslint-disable-next-line class-methods-use-this
@@ -446,9 +431,11 @@ var DateInput = function (_Component) {
   }, {
     key: 'placeholder',
     get: function get() {
+      var locale = this.props.locale;
+
       var date = new Date(2017, 11, 11);
 
-      return removeUnwantedCharacters((0, _dateFormatter.formatDate)(date)).replace('2017', 'year').replace('12', 'month').replace('11', 'day');
+      return removeUnwantedCharacters((0, _dateFormatter.formatDate)(date, locale)).replace('2017', 'year').replace('12', 'month').replace('11', 'day');
     }
   }, {
     key: 'commonInputProps',
@@ -485,8 +472,8 @@ DateInput.defaultProps = {
 };
 
 DateInput.propTypes = {
-  locale: _propTypes2.default.string,
   isCalendarOpen: _propTypes2.default.bool,
+  locale: _propTypes2.default.string,
   maxDate: _propTypes3.isMaxDate,
   maxDetail: _propTypes2.default.oneOf(allViews),
   minDate: _propTypes3.isMinDate,

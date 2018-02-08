@@ -44,8 +44,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var DatePicker = function (_Component) {
-  _inherits(DatePicker, _Component);
+var DatePicker = function (_PureComponent) {
+  _inherits(DatePicker, _PureComponent);
 
   function DatePicker() {
     var _ref;
@@ -187,7 +187,8 @@ var DatePicker = function (_Component) {
           calendarClassName = _props2.calendarClassName,
           datePickerClassName = _props2.className,
           onChange = _props2.onChange,
-          calendarProps = _objectWithoutProperties(_props2, ['calendarClassName', 'className', 'onChange']);
+          value = _props2.value,
+          calendarProps = _objectWithoutProperties(_props2, ['calendarClassName', 'className', 'onChange', 'value']);
 
       var className = 'react-date-picker__calendar';
 
@@ -211,7 +212,8 @@ var DatePicker = function (_Component) {
         },
         _react2.default.createElement(_entry2.default, _extends({
           className: calendarClassName,
-          onChange: this.onChange
+          onChange: this.onChange,
+          value: value || null
         }, calendarProps))
       );
     }
@@ -238,7 +240,7 @@ var DatePicker = function (_Component) {
   }]);
 
   return DatePicker;
-}(_react.Component);
+}(_react.PureComponent);
 
 exports.default = DatePicker;
 

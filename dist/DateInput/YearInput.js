@@ -48,14 +48,13 @@ var YearInput = function (_PureComponent) {
           minYear = this.minYear,
           yearStep = this.yearStep;
       var _props = this.props,
+          className = _props.className,
           itemRef = _props.itemRef,
           value = _props.value,
           onChange = _props.onChange,
           onKeyDown = _props.onKeyDown,
           required = _props.required;
 
-
-      var className = 'react-date-picker__button__input';
 
       return _react2.default.createElement('input', {
         className: (0, _mergeClassNames2.default)(className + '__input', className + '__year'),
@@ -111,6 +110,7 @@ exports.default = YearInput;
 
 
 YearInput.propTypes = {
+  className: _propTypes2.default.string.isRequired,
   itemRef: _propTypes2.default.func,
   maxDate: _propTypes3.isMaxDate,
   minDate: _propTypes3.isMinDate,
